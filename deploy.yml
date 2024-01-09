@@ -1,0 +1,25 @@
+---
+- name: Deploy Apache and configure instances
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+
+    - name: Set timezone to Africa/Lagos
+      timezone:
+        name: Africa/Lagos
+
+    - name: Create HTML file
+      copy:
+        content: "<html><body><h1>Instance {{ inventory_hostname }} is serving content.</h1></body></html>"
+        dest: /var/www/html/index.html
+
+    - name: Start Apache service
+      service:
+        name: httpd
+        state: started
+        enabled: true
+
